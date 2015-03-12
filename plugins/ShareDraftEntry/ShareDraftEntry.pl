@@ -9,7 +9,7 @@ my $plugin = __PACKAGE__->new(
     {
         name        => 'ShareDraftEntry',
         id          => 'ShareDraftEntry',
-        version     => 0.01,
+        version     => 0.02,
         description => '<__trans phrase="Enable sharing draft entries.">',
         plugin_link =>
           'https://github.com/masiuchi/mt-plugin-share-draft-entry',
