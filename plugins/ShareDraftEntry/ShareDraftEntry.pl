@@ -6,20 +6,33 @@ use utf8;
 use base qw( MT::Plugin );
 
 my $plugin = __PACKAGE__->new(
-    {   name        => 'ShareDraftEntry',
+    {
+        name        => 'ShareDraftEntry',
+        id          => 'ShareDraftEntry',
         version     => 0.01,
         description => '<__trans phrase="Enable sharing draft entries.">',
         plugin_link =>
-            'https://github.com/masiuchi/mt-plugin-share-draft-entry',
+          'https://github.com/masiuchi/mt-plugin-share-draft-entry',
 
         author_name => 'Masahiro Iuchi',
         author_link => 'https://twitter.com/masiuchi',
 
         registry => {
+            l10n_lexicon => {
+                ja => &_l10n_lexicon_ja,
+            },
+
             applications => {
                 cms => {
                     callbacks =>
-                        { 'template_source.edit_entry' => \&_insert_mtml, },
+                      { 'template_source.edit_entry' => \&_insert_mtml, },
+                },
+            },
+
+            default_templates => {
+                base_path      => 'tmpl/global',
+                'global:email' => {
+                    'notify-entry' => { label => 'Entry Notify', },
                 },
             },
         },
@@ -44,6 +57,21 @@ __INSERT__
 __MTML__
 
     $$tmpl =~ s/($insert)/$1$mtml/;
+}
+
+sub _l10n_lexicon_ja {
+    return {
+        # ShareDraftEntry
+        'Enable sharing draft entries.' =>
+'公開前の記事／ページも共有できるようにします。',
+
+        # tmpl/global/notify-entry.mtml
+        q{A [lc,_3] entitled '[_1]' has been created to [_2].} =>
+          q{[_3]「[_1]」を[_2]で作成しました。},
+
+'You are receiving this email either because you have elected to receive notifications about content on [_1], or the author of the post thought you would be interested. If you no longer wish to receive these emails, please contact the following person:'
+          => 'このメールは[_1]で作成されたコンテンツに関する通知>を送るように設定されているか、またはコンテンツの著者が選択したユーザーに送信されています。このメールを受信し>たくない場合は、次のユーザーに連絡してください:',
+    };
 }
 
 1;
